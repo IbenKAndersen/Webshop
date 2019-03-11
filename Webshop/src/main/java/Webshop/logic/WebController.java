@@ -6,6 +6,8 @@
 package Webshop.logic;
 
 import Webshop.entity.Cupcake;
+import Webshop.entity.LineItem;
+import Webshop.entity.ShoppingCart;
 import Webshop.entity.Toppings;
 import Webshop.entity.Users;
 import java.io.IOException;
@@ -53,6 +55,9 @@ public class WebController extends HttpServlet {
                 break;
             case "cupcake":
                 cupcake(request, response);
+                break;
+            case "add":
+                add(request, response);
                 break;
             default:
                 throw new AssertionError();
@@ -141,16 +146,44 @@ public class WebController extends HttpServlet {
     }
 
     private void cupcake(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        /* Get parameters from the request in the drop down bar and cast to Strings */
         String topping = (String) request.getParameter("topping");
         String bottom = (String) request.getParameter("bottom");
-        
+
+        /* Instantiate mapper to access the method to create a cupcake  */
         DataMapperCupcake mapper = new DataMapperCupcake();
-        
         Cupcake cupcake = mapper.makeCupcake(topping, bottom);
         
-        HttpSession session = request.getSession();
-        session.setAttribute("cupcake", cupcake);
+        /* Instantiate LineItem and add quanity */
+        LineItem items = new LineItem(cupcake);
+        int qty = (int) Integer.parseInt(
+                  (String) request.getParameter("qty"));
+        items.addQuantity(qty);
         
+        /* Save the request on the session "cupcake" */
+        HttpSession session = request.getSession();
+        //session.setAttribute("cupcake", cupcake);
+
+        /* Instantiate ShoppingCart to acces the method to add items to cart and 
+           instantiate LineItems to add cupcake from session to cart */
+        ShoppingCart cart = (ShoppingCart) session.getAttribute("cart");
+        if (cart == null) { 
+            cart = new ShoppingCart();
+        } /* In order to buy more cupcakes at once */
+
+        cart.addLineItem(items);
+
+        /* Save the request on the session "cupcake" */
+        session.setAttribute("cart", cart);
+
+        /* Forward back to the shop again after adding order to cart */
+        RequestDispatcher rd = request.getRequestDispatcher("shop.jsp");
+        rd.forward(request, response);
+    }
+
+    private void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        /* Show the shop window again */
         RequestDispatcher rd = request.getRequestDispatcher("shop.jsp");
         rd.forward(request, response);
     }

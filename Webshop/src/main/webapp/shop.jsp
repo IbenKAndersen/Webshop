@@ -4,6 +4,8 @@
     Author     : ibenk
 --%>
 
+<%@page import="Webshop.entity.LineItem"%>
+<%@page import="java.util.List"%>
 <%@page import="Webshop.entity.ShoppingCart"%>
 <%@page import="Webshop.entity.Cupcake"%>
 <%@page import="Webshop.entity.Users"%>
@@ -56,10 +58,26 @@
         <br>
         <%
             ShoppingCart cart = (ShoppingCart) session.getAttribute("cart");
-            if (cart != null) {
-                out.println(cart.toString());
+            if (cart != null && !cart.isEmpty()) {
+                if (cart.getLineItems().size() == 1) {
+                    LineItem item = cart.getLineItems().get(0);
+                    out.println(item.toString());
+                } else {
+                    int totalprice = 0;
+                    for (LineItem item : cart.getLineItems()) {
+                        out.println(item.toString());
+        %>
+        <br>
+        <%
+                        totalprice = totalprice + item.getTotalPrice();
+                    }
+        %>
+        <br> <br>
+        <%
+                    out.println("Totalprice: " + totalprice);
+                }
             } else {
-                out.println("Nothing ordered yet");
+                out.println("ShoppingCart is empty");
             }
         %>
     </body>
