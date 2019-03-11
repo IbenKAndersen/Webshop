@@ -4,6 +4,7 @@
     Author     : ibenk
 --%>
 
+<%@page import="Webshop.entity.ShoppingCart"%>
 <%@page import="Webshop.entity.Cupcake"%>
 <%@page import="Webshop.entity.Users"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -25,12 +26,22 @@
             <select name="bottom">
                 <option value="chocolate" >Chocolate</option>
                 <option value="vanilla" >Vanilla</option>
+                <option value="nutmeg" >Nutmeg</option>
+                <option value="pistacio" >Pistacio</option>
+                <option value="almond" >Almond</option>
             </select>
             <select name="topping">
                 <option value="chocolate" >Chocolate</option>
                 <option value="blueberry" >Blueberry</option>
-                <option value="Strawberry">Strawberry 6$</option>
+                <option value="raspberry" >Raspberry</option>
+                <option value="crispy" >Crispy</option>
+                <option value="strawberry">Strawberry</option>
+                <option value="rumraisin" >Rum/Raisin</option>
+                <option value="orange" >Orange</option>
+                <option value="lemon" >Lemon</option>
+                <option value="bluecheese" >Blue cheese</option>
             </select>
+            <input type="text" name="qty" />
             <input type="submit" value="Select">
         </form> 
         <%
@@ -40,9 +51,16 @@
             } else {
                 out.println("No cupcake ordered");
             }
-
         %>
-
-
+        <br> 
+        <br>
+        <%
+            ShoppingCart cart = (ShoppingCart) session.getAttribute("cart");
+            if (cart != null) {
+                out.println(cart.toString());
+            } else {
+                out.println("Nothing ordered yet");
+            }
+        %>
     </body>
 </html>
