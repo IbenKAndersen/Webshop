@@ -82,9 +82,10 @@ public class DataMapperCupcake {
         try {
             conn = new DBConnector();
 
-            String insertTopping = "START TRANSACTION;"
+            String insertTopping 
+                    = "START TRANSACTION;"
                     + "SET AUTOCOMMIT = OFF;"
-                    + "INSERT INTO `cupcake`.`topping` (tname, price) "
+                    + "INSERT INTO `cupcake`.`toppings` (name, price) "
                     + "VALUES (?, " + price + ");"
                     + "COMMIT;";
             PreparedStatement ps = conn.getConnection().prepareStatement(insertTopping);
@@ -105,7 +106,7 @@ public class DataMapperCupcake {
         try {
             conn = new DBConnector();
 
-            String insertBottom = "INSERT INTO `cupcake`.`bottom` (bname, price) "
+            String insertBottom = "INSERT INTO `cupcake`.`bottoms` (name, price) "
                     + "VALUES (?, " + price + ");";
             PreparedStatement ps = conn.getConnection().prepareStatement(insertBottom);
             ps.setString(1, name);
@@ -139,7 +140,7 @@ public class DataMapperCupcake {
         try {
             conn = new DBConnector();
 
-            String query = "SELECT * FROM `Cupcake`.`topping`;";
+            String query = "SELECT * FROM `cupcake`.`toppings`;";
 
             Connection connection = conn.getConnection();
             Statement stmt = connection.createStatement();
@@ -150,8 +151,8 @@ public class DataMapperCupcake {
             int price;
 
             while (rs.next()) {
-                name = rs.getString("tname");
-                price = rs.getInt("Price");
+                name = rs.getString("name");
+                price = rs.getInt("price");
                 Toppings top = new Toppings(name, price);
                 toppings.add(top);
             }
@@ -171,7 +172,7 @@ public class DataMapperCupcake {
         try {
             conn = new DBConnector();
 
-            String query = "SELECT * FROM `Cupcake`.`bottom`;";
+            String query = "SELECT * FROM `cupcake`.`bottoms`;";
 
             Connection connection = conn.getConnection();
             Statement stmt = connection.createStatement();
@@ -182,8 +183,8 @@ public class DataMapperCupcake {
             int price;
 
             while (rs.next()) {
-                name = rs.getString("bname");
-                price = rs.getInt("Price");
+                name = rs.getString("name");
+                price = rs.getInt("price");
                 Bottoms bottom = new Bottoms(name, price);
                 bottoms.add(bottom);
             }
@@ -204,8 +205,8 @@ public class DataMapperCupcake {
         try {
             conn = new DBConnector();
 
-            String query = "SELECT price FROM `Cupcake`.`topping` "
-                    + "WHERE `cupcake`.`topping`.`tname` = '" + name + "';";
+            String query = "SELECT price FROM `cupcake`.`toppings` "
+                    + "WHERE `cupcake`.`toppings`.`name` = '" + name + "';";
 
             Connection connection = conn.getConnection();
             Statement stmt = connection.createStatement();
@@ -233,8 +234,8 @@ public class DataMapperCupcake {
         try {
             conn = new DBConnector();
 
-            String query = "SELECT price FROM `Cupcake`.`bottom` "
-                    + "WHERE `cupcake`.`bottom`.`bname` = '" + name + "';";
+            String query = "SELECT price FROM `cupcake`.`bottoms` "
+                    + "WHERE `cupcake`.`bottoms`.`name` = '" + name + "';";
 
             Connection connection = conn.getConnection();
             Statement stmt = connection.createStatement();
