@@ -17,7 +17,15 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>It's cupcake o'clock</h1><br>Happiness is only a cupcake away<br>
+        <h1>It's cupcake o'clock</h1>
+        
+        <img src="img/cupcake.png" alt="" width="60"/>
+        <img src="img/cupcake.png" alt="" width="60"/>
+        <img src="img/cupcake.png" alt="" width="60"/>
+        <img src="img/cupcake.png" alt="" width="60"/>
+        <img src="img/cupcake.png" alt="" width="60"/>
+        
+        <br>Happiness is only a cupcake away<br>
         <br>
         <%
             Users user = (Users) session.getAttribute("user");
@@ -26,22 +34,22 @@
         <form method="POST" action="/Webshop/WebController?">
             <input type="hidden" name="origin" value="cupcake">
             <select name="bottom">
-                <option value="chocolate" >Chocolate</option>
-                <option value="vanilla" >Vanilla</option>
-                <option value="nutmeg" >Nutmeg</option>
-                <option value="pistacio" >Pistacio</option>
-                <option value="almond" >Almond</option>
+                <option value="chocolate" >Chocolate 5 $</option>
+                <option value="vanilla" >Vanilla 5 $</option>
+                <option value="nutmeg" >Nutmeg 5 $</option>
+                <option value="pistacio" >Pistacio 6 $</option>
+                <option value="almond" >Almond 7 $</option>
             </select>
             <select name="topping">
-                <option value="chocolate" >Chocolate</option>
-                <option value="blueberry" >Blueberry</option>
-                <option value="raspberry" >Raspberry</option>
-                <option value="crispy" >Crispy</option>
-                <option value="strawberry">Strawberry</option>
-                <option value="rumraisin" >Rum/Raisin</option>
-                <option value="orange" >Orange</option>
-                <option value="lemon" >Lemon</option>
-                <option value="bluecheese" >Blue cheese</option>
+                <option value="chocolate" >Chocolate 5 $</option>
+                <option value="blueberry" >Blueberry 5 $</option>
+                <option value="raspberry" >Raspberry 5 $</option>
+                <option value="crispy" >Crispy 6 $</option>
+                <option value="strawberry">Strawberry 6 $</option>
+                <option value="rumraisin" >Rum/Raisin 7 $</option>
+                <option value="orange" >Orange 8 $</option>
+                <option value="lemon" >Lemon 8 $</option>
+                <option value="bluecheese" >Blue cheese 9 $</option>
             </select>
             <input type="text" name="qty" />
             <input type="submit" value="Select">
