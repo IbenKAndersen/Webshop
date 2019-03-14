@@ -16,6 +16,7 @@ public class Users implements Serializable {
     private String password;
     private int balance;
     private String email;
+    private ShoppingCart cart;
     
         public Users() {
     }
@@ -43,7 +44,7 @@ public class Users implements Serializable {
         this.password = password;
     }
 
-    public double getBalance() {
+    public int getBalance() {
         return balance;
     }
 
@@ -61,28 +62,29 @@ public class Users implements Serializable {
     public void addBalance(int amount) {
         this.balance = this.balance + amount;
     }
-//    public int getTotalPrice() {
-//        int totalprice = 0;
-//        cart = getCart();
-//
-//        if (cart != null && !cart.isEmpty()) {
-//            List<LineItem> items = cart.getLineItems();
-//
-//            for (LineItem item : items) {
-//                totalprice = totalprice
-//                        + item.getQuantity() * item.getCupcake().getPrice();
-//            }
-//        }
-//        return totalprice;
-//    }
-//
-//    public void setCart(ShoppingCart cart) {
-//        this.cart = cart;
-//    }
-//
-//    public ShoppingCart getCart() {
-//        return cart;
-//    }
+    
+    public int getTotalPrice() {
+        int totalprice = 0;
+        cart = getCart();
+
+        if (cart != null && !cart.isEmpty()) {
+            List<LineItem> items = cart.getLineItems();
+
+            for (LineItem item : items) {
+                totalprice = totalprice
+                        + item.getQuantity() * item.getCupcake().getPrice();
+            }
+        }
+        return totalprice;
+    }
+
+    public void setCart(ShoppingCart cart) {
+        this.cart = cart;
+    }
+
+    public ShoppingCart getCart() {
+        return cart;
+    }
 
     @Override
     public String toString() {

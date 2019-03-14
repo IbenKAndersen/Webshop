@@ -42,6 +42,10 @@ public class WebController extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
 
+        /* Pulling the user out of Session */
+        HttpSession session = request.getSession();
+        Users user = (Users) session.getAttribute("user");
+
         String origin = (String) request.getParameter("origin");
         switch (origin) {
             case "loginpage":
@@ -56,8 +60,8 @@ public class WebController extends HttpServlet {
             case "cupcake":
                 cupcake(request, response);
                 break;
-            case "add":
-                add(request, response);
+            case "checkout":
+                checkout(user, request);
                 break;
             default:
                 throw new AssertionError();
@@ -153,13 +157,13 @@ public class WebController extends HttpServlet {
         /* Instantiate mapper to access the method to create a cupcake  */
         DataMapperCupcake mapper = new DataMapperCupcake();
         Cupcake cupcake = mapper.makeCupcake(topping, bottom);
-        
+
         /* Instantiate LineItem and add quanity */
         LineItem items = new LineItem(cupcake);
         int qty = (int) Integer.parseInt(
-                  (String) request.getParameter("qty"));
+                (String) request.getParameter("qty"));
         items.addQuantity(qty);
-        
+
         /* Save the request on the session "cupcake" */
         HttpSession session = request.getSession();
         //session.setAttribute("cupcake", cupcake);
@@ -167,9 +171,10 @@ public class WebController extends HttpServlet {
         /* Instantiate ShoppingCart to acces the method to add items to cart and 
            instantiate LineItems to add cupcake from session to cart */
         ShoppingCart cart = (ShoppingCart) session.getAttribute("cart");
-        if (cart == null) { 
+        if (cart == null) {
             cart = new ShoppingCart();
-        } /* In order to buy more cupcakes at once */
+        }
+        /* In order to buy more cupcakes at once */
 
         cart.addLineItem(items);
 
@@ -181,11 +186,38 @@ public class WebController extends HttpServlet {
         rd.forward(request, response);
     }
 
-    private void add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void checkout(Users user, HttpServletRequest request) {
+            /* Get balance and price for all orders */
+            int balance = user.getBalance();
+            int cartPrice = user.getTotalPrice();
 
-        /* Show the shop window again */
-        RequestDispatcher rd = request.getRequestDispatcher("shop.jsp");
-        rd.forward(request, response);
+            /* If balance is too small */
+            if (balance < cartPrice) {
+
+                /* Errormessage */
+                String errormessage = "Not enough money on your balance";
+                request.setAttribute("errormessage", errormessage);
+
+            } else {
+                try {
+                    /* If balance is okay */
+                    
+                    DataMapperUsers db = new DataMapperUsers();
+                    
+                    /* Remove totalprice from balance */
+                    user.addBalance(-cartPrice);
+                    
+                    /* Add ShoppingCart as invoice in sql-database */
+                    db.addInvoice(user);
+                    
+                    /* Make empty ShoppingCart and reset the cart at the user */
+                    ShoppingCart emptyCart = new ShoppingCart();
+                    user.setCart(emptyCart);
+                } catch (SQLException ex) {
+                    Logger.getLogger(WebController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
+        }
     }
 
 }

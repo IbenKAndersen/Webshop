@@ -19,7 +19,7 @@
             Password:<br>
             <input type="text" name="password" > <br>
             Email: <br> 
-            <input type="text" name="email" > <br> 
+            <input type="text" name="email" > <br><br>
             <input type="submit" value="Submit">
             
         </form>

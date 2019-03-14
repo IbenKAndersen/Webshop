@@ -5,12 +5,19 @@
  */
 package Webshop.logic;
 
+import Webshop.entity.Bottoms;
+import Webshop.entity.Cupcake;
+import Webshop.entity.LineItem;
+import Webshop.entity.ShoppingCart;
+import Webshop.entity.Toppings;
 import Webshop.entity.Users;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -79,6 +86,46 @@ public class DataMapperUsers {
         }
         user.setUserName(username);
         return user;
+    }
+    
+    public void addInvoice(Users user) {
+        try {
+            dbc = new DBConnector();
+
+            String name = user.getUserName();
+            String insertBalance = "INSERT INTO `cupcake`.`invoices` (`name`) VALUES (?);";
+            PreparedStatement ps = dbc.getConnection().prepareStatement(insertBalance);
+            ps.setString(1, name);
+            ps.executeUpdate();
+
+            ShoppingCart cart = user.getCart();
+            for (LineItem item : cart.getLineItems()) {
+                addOrder(item);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DataMapperUsers.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void addOrder(LineItem item) throws SQLException {
+        dbc = new DBConnector();
+
+        Cupcake cake = item.getCupcake();
+        Toppings top = cake.getTop();
+        Bottoms bot = cake.getBottom();
+
+        String tname = top.getName();
+        String bname = bot.getName();
+        int qty = item.getQuantity();
+
+        String query = "INSERT INTO `cupcake`.`orderdetails` (tname, bname, qty)"
+                + "VALUES (?, ?, ?)";
+
+        PreparedStatement ps = dbc.getConnection().prepareStatement(query);
+        ps.setString(1, tname);
+        ps.setString(2, bname);
+        ps.setInt(3, qty);
+        ps.executeUpdate();
     }
     
 }

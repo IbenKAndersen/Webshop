@@ -16,9 +16,9 @@
         <form method="post" action="/Webshop/WebController?">
             <input type="hidden" name="origin" value="loginpage">
             Username:<br>
-            <input type="text" name="username"><br>
-            Password:<br>
-            <input type="text" name="password" > <br>
+            <input type="text" name="username" value="a"/><br>
+            Password:<br> 
+            <input type="password" name="password" value="a"/> <br><br>
             <input type="submit" value="Log in">
         </form>
         <!-- 
