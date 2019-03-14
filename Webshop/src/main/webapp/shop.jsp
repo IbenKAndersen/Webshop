@@ -29,8 +29,13 @@
         <br>
         <%
             Users user = (Users) session.getAttribute("user");
-            out.println("User: " + user.getUserName() + ", balance: " + user.getBalance());
+            out.println("User: " + user.getUserName());
         %>
+        <br>
+        <%
+            out.println("Balance: " + user.getBalance());
+        %>
+        <br><br>
         <form method="POST" action="/Webshop/WebController?">
             <input type="hidden" name="origin" value="cupcake">
             <select name="bottom">
@@ -51,17 +56,17 @@
                 <option value="lemon" >Lemon 8 $</option>
                 <option value="bluecheese" >Blue cheese 9 $</option>
             </select>
-            <input type="text" name="qty" />
+            <input type="text" name="qty" placeholder="Type in quantity" />
             <input type="submit" value="Select">
         </form> 
-        <%
+        <%-- <%
             Cupcake cupcake = (Cupcake) session.getAttribute("cupcake");
             if (cupcake != null) {
                 out.println("You have ordered a cupcake with " + cupcake.getBottom() + "-bottom and " + cupcake.getTop() + "-topping");
             } else {
                 out.println("No cupcake ordered");
             }
-        %>
+        %> --%>
         <br> 
         <br>
         <%
@@ -82,11 +87,16 @@
         %>
         <br> <br>
         <%
-                    out.println("Totalprice: " + totalprice);
+                    out.println("Totalprice: " + totalprice + " $");
                 }
             } else {
                 out.println("ShoppingCart is empty");
             }
         %>
+        <br> <br>
+                <form method="post" action="/Webshop/WebController?">
+            <input type="hidden" name="origin" value="checkout">
+        <input type="submit" value="Check out">
+        </form>     
     </body>
 </html>
